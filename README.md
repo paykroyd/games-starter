@@ -17,4 +17,3 @@ This is using [Crafty.js](https://craftyjs.com) as a game engine.
 ## Games Available
 
 - [Pong](http://localhost:8000/pong.html)
-

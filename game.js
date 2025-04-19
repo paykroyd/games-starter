@@ -5,11 +5,13 @@ window.onload = function() {
 
 	var callback = function() {
 		var fox = Crafty.e('2D, Canvas, runner_start, KeyboardState, SpriteAnimation, Twoway')
-			.attr({x: 25, y: 100})
-			.twoway(180)
+			.attr({x: 25, y: 100})  // This sets initial position
+			.twoway(180)  // This sets speed
 			.reel("running", 1000, [[0,0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
 					       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]]);
 		
+		// This "subscribes" to a "KeyDown" event. Any time a key pushed down this
+		// function will get called. 
 		fox.bind("KeyDown", function(e) {
 			if (e.key == Crafty.keys.RIGHT_ARROW) {
 				this.flip("X");
@@ -51,11 +53,5 @@ window.onload = function() {
 	};
 
 	Crafty.load(assetsObj, callback)
-
-
-
-
-
-
 };
 
