@@ -14,6 +14,33 @@ window.onload = function() {
 		}
 	});
 
+	// Forked from Twoway
+	Crafty.c("Player", {
+
+		init: function () {
+			this.requires("Multiway, Jumper");
+		},
+
+		player: function (speed, jumpSpeed) {
+			// Set multiway with horizontal speed only
+			var hSpeed = speed || this._speed;
+			this.multiway({x: hSpeed}, {
+				RIGHT_ARROW: 0,
+				LEFT_ARROW: 180,
+				D: 0,
+				A: 180,
+				Q: 180
+			});
+
+			this.jumper(jumpSpeed || speed * 2 || this._jumpSpeed, [
+				Crafty.keys.UP_ARROW,
+				Crafty.keys.SPACE,
+			]);
+
+			return this;
+		}
+	});
+
 	var callback = function() {
 
 		// Add some blocks in steps going up with some gaps in between
@@ -31,9 +58,9 @@ window.onload = function() {
 			startY -= distanceUp;
 		}
 
-		var fox = Crafty.e('2D, Canvas, Gravity, runner_start, KeyboardState, SpriteAnimation, Twoway')
+		var fox = Crafty.e('2D, Canvas, Gravity, runner_start, KeyboardState, SpriteAnimation, Player')
 			.attr({x: 5, y: 600})  // This sets initial position
-			.twoway(180, 200)  // This sets speed
+			.player(180, 200)
 			.gravity("Block")
 			.reel("running", 1000, [[0,0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
 					       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]])
@@ -44,6 +71,7 @@ window.onload = function() {
 					this.y = 550;
 				}	
 			});
+		fox.flip("X");
 		// This "subscribes" to a "KeyDown" event. Any time a key pushed down this
 		// function will get called. 
 		fox.bind("KeyDown", function(e) {
