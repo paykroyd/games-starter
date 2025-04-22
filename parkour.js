@@ -44,7 +44,7 @@ window.onload = function() {
 	var callback = function() {
 
 		// Add some blocks in steps going up with some gaps in between
-		var distanceBetween = 180;
+		var distanceBetween = 190;
 		var distanceUp = 60;
 
 		var startX = 0;
@@ -58,8 +58,8 @@ window.onload = function() {
 			startY -= distanceUp;
 		}
 
-		var fox = Crafty.e('2D, Canvas, Gravity, runner_start, KeyboardState, SpriteAnimation, Player')
-			.attr({x: 5, y: 600})  // This sets initial position
+		var player = Crafty.e('2D, Canvas, Gravity, runner_start, KeyboardState, SpriteAnimation, Player')
+			.attr({x: 5, y: 600, w: 68, h: 70})  // This sets initial position
 			.player(180, 200)
 			.gravity("Block")
 			.reel("running", 1000, [[0,0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
@@ -68,16 +68,16 @@ window.onload = function() {
 				if (this.vx > 0) {
 					console.log(this.vx);
 				}	
-				// Detect that the fox fell off the screen.
+				// Detect that the player fell off the screen.
 				if (this.y >= 800) {
 					this.x = 5;
 					this.y = 550;
 				}	
 			});
-		fox.flip("X");
+		player.flip("X");
 		// This "subscribes" to a "KeyDown" event. Any time a key pushed down this
 		// function will get called. 
-		fox.bind("KeyDown", function(e) {
+		player.bind("KeyDown", function(e) {
 			if (e.key == Crafty.keys.RIGHT_ARROW) {
 				this.flip("X");
 
@@ -92,7 +92,7 @@ window.onload = function() {
 			}
 		});
 
-		fox.bind("KeyUp", function(e) {
+		player.bind("KeyUp", function(e) {
 			if (!this.isKeyDown("RIGHT_ARROW") 
 				&& !this.isKeyDown("LEFT_ARROW")
 				&& !this.isKeyDown("UP_ARROW")) {
@@ -100,7 +100,7 @@ window.onload = function() {
 			}
 		});
 
-		fox.bind("CheckJumping", function(ground) {
+		player.bind("CheckJumping", function(ground) {
 			// If it will be able to jump, lock in current speed for the jump
 			// and disable movement keys.
 			if (this.canJump) {
@@ -108,25 +108,25 @@ window.onload = function() {
 			}
 		});
 
-		fox.bind("LandedOnGround", function(ground) {
+		player.bind("LandedOnGround", function(ground) {
 			this.enableControl();
 		});
 	}
 
 	var assetsObj = {
 		"sprites": {
-			// This spritesheet has 12 images, in a 2 by 6 grid
-			// The dimensions are 918x278
-			"fox_running.png": {
+			// This spritesheet has 29 images, in a 5 by 6 grid
+			// The dimensions are 822x700
+			"crafty_bot_running.png": {
 				// This is the width of each image in pixels
-				tile: 153,
+				tile: 137,
 				// The height of each image
-				tileh: 139,
+				tileh: 140,
 				// We give names to three individual images
 				map: {
 					runner_start: [0, 0],
-					runner_middle: [5, 0],
-					runner_end: [5, 1]
+					runner_middle: [5, 2],
+					runner_end: [4, 4]
 				}
 			}
 		}
