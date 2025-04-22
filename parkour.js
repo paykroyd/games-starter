@@ -65,6 +65,9 @@ window.onload = function() {
 			.reel("running", 1000, [[0,0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
 					       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]])
 			.bind('UpdateFrame', function () {
+				if (this.vx > 0) {
+					console.log(this.vx);
+				}	
 				// Detect that the fox fell off the screen.
 				if (this.y >= 800) {
 					this.x = 5;
@@ -93,9 +96,20 @@ window.onload = function() {
 			if (!this.isKeyDown("RIGHT_ARROW") 
 				&& !this.isKeyDown("LEFT_ARROW")
 				&& !this.isKeyDown("UP_ARROW")) {
-				console.log("pausing animation");
 				this.pauseAnimation();
 			}
+		});
+
+		fox.bind("CheckJumping", function(ground) {
+			// If it will be able to jump, lock in current speed for the jump
+			// and disable movement keys.
+			if (this.canJump) {
+				this.disableControl();
+			}
+		});
+
+		fox.bind("LandedOnGround", function(ground) {
+			this.enableControl();
 		});
 	}
 
