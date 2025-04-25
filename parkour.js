@@ -44,8 +44,8 @@ window.onload = function() {
 	var callback = function() {
 
 		// Add some blocks in steps going up with some gaps in between
-		var distanceBetween = 190;
-		var distanceUp = 60;
+		var distanceBetween = 100;
+		var distanceUp = 40;
 
 		var startX = 0;
 		var startY = 600;
@@ -59,19 +59,27 @@ window.onload = function() {
 		}
 
 		var player = Crafty.e('2D, Canvas, Gravity, runner_start, KeyboardState, SpriteAnimation, Player')
-			.attr({x: 5, y: 600, w: 68, h: 70})  // This sets initial position
+			.attr({x: 5, y: 520, w: 68, h: 70})  // This sets initial position
 			.player(180, 200)
 			.gravity("Block")
+			.preventGroundTunneling(true)
 			.reel("running", 1000, [[0,0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
 					       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]])
+			// Supportable throws a CheckLanding event that we can use to prevent from landing
+			// unless the player is actually above the ground. 
+			// The default behavior for gravity is that if the player is in contact with the 
+			// with the ground anywhere it will land but this looks weird because the player
+			// will be falling lower than the landing than suddenly be on top of it. 
+			.bind("CheckLanding", function(ground) {
+				if (this.y + this.h > ground.y + this.dy) { 
+					this.canLand = false;
+				} 
+			})
 			.bind('UpdateFrame', function () {
-				if (this.vx > 0) {
-					console.log(this.vx);
-				}	
 				// Detect that the player fell off the screen.
 				if (this.y >= 800) {
 					this.x = 5;
-					this.y = 550;
+					this.y = 520;
 				}	
 			});
 		player.flip("X");
